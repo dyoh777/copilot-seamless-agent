@@ -60,7 +60,7 @@ None at this time. Please report issues on [GitHub](https://github.com/jraylan/s
 
 ## Release Notes
 
-### 0.0.3
+### 0.0.4
 
 - Initial beta release
 - Added `ask_user` Language Model tool

@@ -60,7 +60,7 @@ Nenhum até o momento. Por favor, reporte problemas no [GitHub](https://github.c
 
 ## Notas de Versão
 
-### 0.0.3
+### 0.0.4
 
 - Lançamento beta inicial
 - Adicionada ferramenta `ask_user` para Language Model
