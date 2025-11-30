@@ -1,14 +1,36 @@
+# Development files
 .vscode/**
 .vscode-test/**
 src/**
+.github/**
+
+# Config files
 .gitignore
 .yarnrc
+.eslintrc*
+.prettierrc*
+tsconfig.json
+esbuild.js
 vsc-extension-quickstart.md
-**/tsconfig.json
-**/.eslintrc.json
+
+# Build artifacts - exclude all TypeScript files including .d.ts
 **/*.map
 **/*.ts
+
+# All node_modules (bundled with esbuild)
 node_modules/**
-!node_modules/@modelcontextprotocol/**
-!node_modules/express/**
-!node_modules/zod/**
+
+# Package files
+*.vsix
+package-lock.json
+
+# Other
+**/.git/**
+**/test/**
+**/tests/**
+**/*.test.js
+**/*.spec.js
+
+# Redundant dist files (tsc output, keep only extension.js from esbuild)
+dist/localization.js
+dist/mcpServer.js

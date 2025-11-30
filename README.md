@@ -61,12 +61,12 @@ Add the following config to your MCP client:
 ```
 
 > [!NOTE]
-> The default port is `7071`. You can change it in VS Code settings under `mcp-server.port`.
+> The default port is `7071`. You can change it in VS Code settings under `seamless-agent.port`.
 
 <details>
   <summary>Copilot / VS Code</summary>
   
-  Follow the MCP install [guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server).
+  Follow the MCP install [guide](https://code.visualstudio.com/docs/copilot/chat/seamless-agents#_add-an-seamless-agent).
   
   Add the following to your `settings.json`:
   ```json
@@ -176,25 +176,25 @@ The Seamless Agent MCP server supports the following configuration options:
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| `mcp-server.port` | number | `7071` | Port number for the MCP server |
-| `mcp-server.autoStart` | boolean | `true` | Automatically start the MCP server when VS Code opens |
-| `mcp-server.retryOnCancel` | boolean | `true` | If enabled, when the user cancels a dialog, the tool will retry once more before allowing the agent to end |
+| `seamless-agent.port` | number | `7071` | Port number for the MCP server |
+| `seamless-agent.autoStart` | boolean | `true` | Automatically start the MCP server when VS Code opens |
+| `seamless-agent.retryOnCancel` | boolean | `true` | If enabled, when the user cancels a dialog, the tool will retry once more before allowing the agent to end |
 
 ### Changing Settings
 
 You can change these settings in VS Code:
 
 1. Open VS Code Settings (`Ctrl+,` or `Cmd+,`)
-2. Search for "mcp-server"
+2. Search for "seamless-agent"
 3. Modify the desired settings
 
 Or add to your `settings.json`:
 
 ```json
 {
-  "mcp-server.port": 7071,
-  "mcp-server.autoStart": true,
-  "mcp-server.retryOnCancel": true
+  "seamless-agent.port": 7071,
+  "seamless-agent.autoStart": true,
+  "seamless-agent.retryOnCancel": true
 }
 ```
 
@@ -243,7 +243,7 @@ Click the status bar item to toggle the server on/off.
 
 ### Retry on cancel not working
 
-1. Verify `mcp-server.retryOnCancel` is set to `true` in settings
+1. Verify `seamless-agent.retryOnCancel` is set to `true` in settings
 2. The retry only happens once per dialog to prevent infinite loops
 
 ### Disabling Tool Confirmation
