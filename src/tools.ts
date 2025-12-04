@@ -6,6 +6,7 @@ import { AgentInteractionProvider } from './webviewProvider';
 interface Input {
     question: string;
     title?: string;
+    agentName?: string;
 }
 
 /**
@@ -22,7 +23,9 @@ export function registerNativeTools(context: vscode.ExtensionContext, provider: 
             // 1. Parse parameters
             const params = options.input;
             const question = params.question;
-            const title = params.title || strings.confirmationRequired;
+            const agentName = params.agentName || 'Agent';
+            const baseTitle = params.title || strings.confirmationRequired;
+            const title = `${agentName}: ${baseTitle}`;
 
             // 2. Execute Logic - Try webview first, fall back to VS Code dialogs
             const result = await askViaWebview(provider, question, title);
