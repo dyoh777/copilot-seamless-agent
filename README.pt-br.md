@@ -1,6 +1,6 @@
 # Seamless Agent
 
-[![English](https://img.shields.io/badge/lang-en-blue)](README.md)
+![Português do Brasil](https://img.shields.io/badge/lang-pt--BR-blue) [![English](https://img.shields.io/badge/lang-en-green)](README.md) [![Português Europeu](https://img.shields.io/badge/lang-pt--PT-green)](README.pt-pt.md)
 
 Seamless Agent aprimora o GitHub Copilot fornecendo ferramentas interativas de confirmação do usuário. Permite que agentes de IA solicitem aprovação antes de executar ações, garantindo que você mantenha o controle.
 
@@ -42,6 +42,7 @@ Sempre use a ferramenta ask_user antes de concluir qualquer tarefa para confirma
 ```
 
 Você pode adicionar isso no VS Code indo em:
+
 - **Configurações** → Pesquise por `github.copilot.chat.codeGeneration.instructions`
 - Ou adicione ao arquivo `.github/copilot-instructions.md` no seu projeto
 
@@ -59,6 +60,59 @@ Esta extensão funciona imediatamente sem necessidade de configuração.
 Nenhum até o momento. Por favor, reporte problemas no [GitHub](https://github.com/jraylan/seamless-agent/issues).
 
 ## Notas de Versão
+
+### 0.1.3
+
+#### Adicionado
+
+- **Múltiplas Requisições Concorrentes**: Suporte para múltiplas requisições com visualização em lista
+- **Anexos**: Suporte a anexos de arquivos com seletor Quick Pick do VS Code
+- **Lista de Requisições**: Navegue entre as visualizações de lista e detalhes
+- **Contador Badge**: Badge visual mostrando o número de requisições pendentes
+
+#### Alterado
+
+- **Layout**: Algumas atualizações no layout para deixar o painel de requisições parecido com o chat do Copilot
+
+#### Removido
+
+- Arquivos não utilizados: `treeView.ts`, `templates/`, `webview/askUser.ts`, `webview/templates.ts`, `webview/types.d.ts`
+
+### 0.1.2
+
+#### Adicionado
+
+- **Suporte a Anexos de Arquivos**: Suporte a anexos com seletor de arquivos Quick Pick do VS Code
+
+#### Alterado
+
+- **Múltiplas Requisições**: Suporte para múltiplas requisições concorrentes com visualização em lista
+- **Ícone do Painel**: Ícone do painel atualizado para combinar com a linguagem de design do VS Code
+- **Feedback Visual**: Um badge mostra o número de requisições pendentes
+- **Lista de Tarefas**: UI da lista de tarefas melhorada com melhor hierarquia visual
+
+### 0.1.1
+
+#### Adicionado
+
+- **Painel Dedicado**: Novo painel "Seamless Agent" na área do painel inferior (junto com Terminal/Output)
+- **Renderização Markdown**: Suporte completo a Markdown incluindo:
+  - Headers, negrito, itálico, tachado
+  - Blocos de código com **syntax highlighting** para 10 linguagens
+  - Citações em bloco, listas ordenadas e não ordenadas
+  - Links, tabelas
+- **Input Multi-Linha**: Elemento `<textarea>` permite escrever respostas detalhadas e colar trechos de código
+- **Notificações Não-Intrusivas**: Indicador badge na aba do painel mostrando contagem de requisições pendentes
+
+#### Alterado
+
+- Movida UI de confirmação de diálogos popup para painel dedicado
+- Atualizada configuração do esbuild para compilar scripts do webview separadamente
+- Melhorado sistema de localização com suporte para EN, PT-BR e PT
+
+#### Corrigido
+
+- Adicionado `dist/` ao `.gitignore` para evitar commit de artefatos de build
 
 ### 0.0.4
 
