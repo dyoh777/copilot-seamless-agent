@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { strings } from './localization';
-import { AgentInteractionProvider, AttachmentInfo, UserResponseResult } from './webviewProvider';
+import { AgentInteractionProvider, AttachmentInfo, UserResponseResult } from './webview/webviewProvider';
 
 
 export interface Input {

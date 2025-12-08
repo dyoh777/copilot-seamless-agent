@@ -1,7 +1,10 @@
 const esbuild = require('esbuild');
+const fs = require('fs');
+const path = require('path');
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
+const antigravity = process.argv.includes('--target=antigravity');
 
 /** @type {import('esbuild').Plugin} */
 const esbuildProblemMatcherPlugin = {
@@ -22,10 +25,39 @@ const esbuildProblemMatcherPlugin = {
     },
 };
 
+/** @type {import('esbuild').Plugin} */
+const shebangPlugin = {
+    name: 'shebang',
+    setup(build) {
+        build.onEnd(async (result) => {
+            if (result.errors.length === 0) {
+                const fs = require('fs');
+                const outfile = build.initialOptions.outfile;
+                if (outfile && outfile.includes('seamless-agent-mcp.js')) {
+                    const content = fs.readFileSync(outfile, 'utf8');
+                    // Remove any existing shebang and add it at the very start
+                    const withoutShebang = content.replace(/^#!.*\n?/, '');
+                    fs.writeFileSync(outfile, '#!/usr/bin/env node\n' + withoutShebang);
+                }
+            }
+        });
+    },
+};
+
 async function main() {
+    // Clean dist folder
+    const distPath = path.join(__dirname, 'dist');
+    if (fs.existsSync(distPath)) {
+        console.log('Cleaning dist folder...');
+        fs.rmSync(distPath, { recursive: true, force: true });
+    }
+
+    const extensionEntryPoint = antigravity ? 'src/extension.antigravity.ts' : 'src/extension.ts';
+    console.log(`Building for ${antigravity ? 'Antigravity' : 'VS Code'} using entry point: ${extensionEntryPoint}`);
+
     // Extension bundle (Node.js)
     const extensionCtx = await esbuild.context({
-        entryPoints: ['src/extension.ts'],
+        entryPoints: [extensionEntryPoint],
         bundle: true,
         format: 'cjs',
         minify: production,
@@ -52,13 +84,31 @@ async function main() {
         plugins: [esbuildProblemMatcherPlugin],
     });
 
+    const contexts = [extensionCtx, webviewCtx];
+
+    // CLI bundle (Node.js standalone) - Only for Antigravity
+    if (antigravity) {
+        const cliCtx = await esbuild.context({
+            entryPoints: ['bin/seamless-agent-mcp.js'],
+            bundle: true,
+            format: 'cjs',
+            minify: production,
+            sourcemap: !production,
+            sourcesContent: false,
+            platform: 'node',
+            outfile: 'dist/seamless-agent-mcp.js',
+            external: [],  // Bundle all dependencies
+            logLevel: 'info',
+            plugins: [esbuildProblemMatcherPlugin, shebangPlugin],
+        });
+        contexts.push(cliCtx);
+    }
+
     if (watch) {
-        await Promise.all([extensionCtx.watch(), webviewCtx.watch()]);
+        await Promise.all(contexts.map(ctx => ctx.watch()));
     } else {
-        await extensionCtx.rebuild();
-        await webviewCtx.rebuild();
-        await extensionCtx.dispose();
-        await webviewCtx.dispose();
+        await Promise.all(contexts.map(ctx => ctx.rebuild()));
+        await Promise.all(contexts.map(ctx => ctx.dispose()));
     }
 }
 

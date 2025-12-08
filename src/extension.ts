@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { registerNativeTools } from './tools';
-import { AgentInteractionProvider } from './webviewProvider';
+import { AgentInteractionProvider } from './webview/webviewProvider';
 
 const PARTICIPANT_ID = 'seamless-agent.agent';
 
