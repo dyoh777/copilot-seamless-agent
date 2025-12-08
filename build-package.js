@@ -13,9 +13,11 @@ const antigravityReadme = 'README.antigravity.md';
 const backupReadme = 'README.md.bak';
 
 try {
-    // 1. Prepare README
+    // 1. Prepare README and package.json
     if (target === 'ovsx') {
-        console.log(`[${target}] Preparing Antigravity README...`);
+        console.log(`[${target}] Preparing Antigravity README and package.json...`);
+
+        // Swap README
         if (fs.existsSync(originalReadme)) {
             fs.copyFileSync(originalReadme, backupReadme);
         }
@@ -25,6 +27,31 @@ try {
             console.error(`Error: ${antigravityReadme} not found!`);
             process.exit(1);
         }
+
+        // Modify package.json
+        const packageJson = 'package.json';
+        const backupPackageJson = 'package.json.bak';
+        if (fs.existsSync(packageJson)) {
+            fs.copyFileSync(packageJson, backupPackageJson);
+            const pkg = JSON.parse(fs.readFileSync(packageJson, 'utf8'));
+
+            if (!pkg.contributes) pkg.contributes = {};
+            if (!pkg.contributes.commands) pkg.contributes.commands = [];
+
+            // Add Antigravity-specific command
+            pkg.contributes.commands.push({
+                "command": "seamless-agent.restartMcpServer",
+                "title": "Restart Seamless Agent MCP Server"
+            });
+
+            // Add bin entry
+            pkg.bin = {
+                "seamless-agent-mcp": "./dist/seamless-agent-mcp.js"
+            };
+
+            fs.writeFileSync(packageJson, JSON.stringify(pkg, null, 2));
+        }
+
     } else {
         console.log(`[${target}] Using standard README...`);
         // Ensure we are using the original README (if backup exists, restore it to be safe, though we usually clean up)
@@ -59,9 +86,18 @@ try {
     process.exit(1);
 } finally {
     // 4. Cleanup / Restore
-    if (target === 'ovsx' && fs.existsSync(backupReadme)) {
-        console.log(`[${target}] Restoring original README...`);
-        fs.copyFileSync(backupReadme, originalReadme);
-        fs.unlinkSync(backupReadme);
+    if (target === 'ovsx') {
+        if (fs.existsSync(backupReadme)) {
+            console.log(`[${target}] Restoring original README...`);
+            fs.copyFileSync(backupReadme, originalReadme);
+            fs.unlinkSync(backupReadme);
+        }
+        const backupPackageJson = 'package.json.bak';
+        const packageJson = 'package.json';
+        if (fs.existsSync(backupPackageJson)) {
+            console.log(`[${target}] Restoring original package.json...`);
+            fs.copyFileSync(backupPackageJson, packageJson);
+            fs.unlinkSync(backupPackageJson);
+        }
     }
 }
